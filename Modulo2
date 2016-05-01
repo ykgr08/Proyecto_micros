@@ -1,0 +1,99 @@
+function varargout = Modulo2(varargin)
+% MODULO2 MATLAB code for Modulo2.fig
+%      MODULO2, by itself, creates a new MODULO2 or raises the existing
+%      singleton*.
+%
+%      H = MODULO2 returns the handle to a new MODULO2 or the handle to
+%      the existing singleton*.
+%
+%      MODULO2('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in MODULO2.M with the given input arguments.
+%
+%      MODULO2('Property','Value',...) creates a new MODULO2 or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before Modulo2_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to Modulo2_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help Modulo2
+
+% Last Modified by GUIDE v2.5 01-May-2016 14:09:24
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @Modulo2_OpeningFcn, ...
+                   'gui_OutputFcn',  @Modulo2_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before Modulo2 is made visible.
+function Modulo2_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to Modulo2 (see VARARGIN)
+a = arduino('COM5');
+a.pinMode(3, 'output');
+handles.a = a;
+% Choose default command line output for Modulo2
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes Modulo2 wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = Modulo2_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+% --- Executes on button press in cambiar.
+function cambiar_Callback(hObject, eventdata, handles)
+
+    button_state = get(hObject, 'value');
+    
+    if button_state == get(hObject, 'Max');
+        set(handles.posicion, 'BackgroundColor', 'g');
+        set(handles.posicion,'String', 'ABIERTO' );    
+        handles.a.digitalWrite(3,1);
+   
+    
+    else button_state == get(hObject,'Min');
+        set(handles.posicion, 'BackgroundColor', [1 0 0]);
+        set(handles.posicion,'String', 'CERRADO' );
+        handles.a.digitalWrite(3,0);
+    end
+
+% --- Executes on button press in menu.
+function menu_Callback(hObject, eventdata, handles)
+% hObject    handle to menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
